@@ -514,6 +514,10 @@ class _SingleImageEditorState extends State<SingleImageEditor> {
   void initState() {
     if (widget.image != null) {
       loadImage(widget.image!);
+    } else {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        loadCamera();
+      });
     }
 
     super.initState();
@@ -1106,6 +1110,14 @@ class _SingleImageEditorState extends State<SingleImageEditor> {
     ));
 
     setState(() {});
+  }
+
+  Future<void> loadCamera() async {
+    var image = await picker.pickImage(source: ImageSource.camera);
+
+    if (image == null) return;
+
+    loadImage(image);
   }
 }
 
